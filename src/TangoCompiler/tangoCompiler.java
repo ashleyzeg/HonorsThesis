@@ -24,7 +24,7 @@ public class tangoCompiler {
             System.exit(0);
         }
 
-        tangoScanner ts = new tangoScanner(inFile);
+        TangoScanner ts = new TangoScanner(inFile);
 
     }
 }
