@@ -33,14 +33,6 @@ public class Token {
     public static final int KEYWORD = 11;
     public static final int ID = 12;
 
-    public static final String[] keywords = {"clase", "func$", "principal", "imprimirln"};
-
-    public Boolean isKeyword(String t) {
-        ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
-        //returns true if keyword is in list, returns false if keyword is not in list
-        return keywordList.contains(t);
-    }
-
     public static final String [] typename = {
       "INT", "OP", "ASSIGN", "SEMI", "VAR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_CB", "CLOSE_CB",
       "DB_QUOTE", "S_QUOTE", "KEYWORD", "ID"
@@ -50,5 +42,22 @@ public class Token {
     public String toString() {
         return "Token: " + value + " Type: " + typename[type];
     }
+
+    public static final String[] keywords = {"clase", "func$", "principal", "imprimirln"};
+
+    public Boolean isKeyword(String t) {
+        ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
+        //returns true if keyword is in list, returns false if keyword is not in list
+        return keywordList.contains(t);
+    }
+
+    //TODO: separate Keywords into keywords and library calls
+
+    public Boolean isClase(String t) {return t.equals("clase");}
+    public Boolean isFunc$(String t) {return t.equals("func$");}
+    public Boolean isPrincipal(String t) {return t.equals("principal");}
+    public Boolean isImprimirln(String t) {return t.equals("imprimirln");}
+
+
 
 }

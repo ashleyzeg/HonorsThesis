@@ -26,5 +26,7 @@ public class tangoCompiler {
 
         TangoScanner ts = new TangoScanner(inFile);
 
+        TangoParser tp = new TangoParser(ts.tokens);
+
     }
 }
