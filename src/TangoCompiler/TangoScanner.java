@@ -7,19 +7,21 @@ import java.util.*;
  * Created by azegiest on 10/13/15.
  */
 public class TangoScanner {
-    //public Token [] tokens;
     public ArrayList<Token> tokens = new ArrayList<>();
+    public Token tokenObj = new Token("", 0, 0);
 
     public TangoScanner(File input) throws FileNotFoundException {
         System.out.println("*** Welcome to the Tango Scanner!!! ***");
 
         Scanner program = new Scanner(new FileReader(input));
         String line;
+        int lineNumber = 0;
         while(program.hasNextLine()) {
             line = program.nextLine().trim();
-            scan(line);
+            lineNumber = lineNumber + 1;
+            scan(line, lineNumber);
             //append end of line character to array
-            tokens.add(new Token("*****", "END_LINE"));
+            //tokens.add(new Token("*****", "END_LINE"));
 //            for (Token t: tokens)
 //                if (t != null) System.out.println(t);
         }
@@ -29,39 +31,57 @@ public class TangoScanner {
 
     //scans for valid tokens and appends them to the tokens array list
     //when the end of a line is reached, a new line character is placed into the arraylist
-    public void scan(String line) {
+    public void scan(String line, int lineNumber) {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
 
+            //id, keyword, or library call
+            if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
+                int j;
+                for( j=i; j<line.length() && (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '$'); j++) {
+                    c=line.charAt(j);
+                }
+                if (tokenObj.isKeyword(line.substring(i,j-1)))
+                    tokens.add(new Token(line.substring(i,j-1), Token.KEYWORD, lineNumber));
+                else
+                    tokens.add(new Token(line.substring(i,j-1), Token.ID, lineNumber));
+                i=j-2;
+            }
             //open curly brace
-            if (c == '{' )
-                tokens.add(new Token(""+c, "OPEN_CB"));
+            else if (c == '{' )
+                tokens.add(new Token(""+c, Token.OPEN_CB, lineNumber));
             //close curly brace
             else if (c == '}' )
-                tokens.add(new Token(""+c, "CLOSE_CB"));
+                tokens.add(new Token(""+c, Token.CLOSE_CB, lineNumber));
             //open parenthesis
             else if (c == '(' )
-                tokens.add(new Token(""+c, "OPEN_PAREN"));
+                tokens.add(new Token(""+c, Token.OPEN_PAREN, lineNumber));
             //close parenthesis
             else if (c == ')' )
-                tokens.add(new Token(""+c, "CLOSE_PAREN"));
+                tokens.add(new Token(""+c, Token.CLOSE_PAREN, lineNumber));
             //semi colon
             else if (c == ';')
-                tokens.add(new Token(""+c, "SEMI"));
+                tokens.add(new Token(""+c, Token.SEMI, lineNumber));
             //assignment operator
             else if (c == '=')
-                tokens.add(new Token(""+c, "ASSIGN"));
+                tokens.add(new Token(""+c, Token.ASSIGN, lineNumber));
             //operators
             else if (c == '+' || c == '-' || c == '*' || c == '/')
-                tokens.add(new Token(""+c, "OP"));
+                tokens.add(new Token(""+c, Token.OP, lineNumber));
+            //double quote
+            else if (c == '"')
+                tokens.add(new Token(""+c, Token.DB_QUOTE, lineNumber));
+            //single quote
+            else if (c == '\'')
+                tokens.add(new Token(""+c, Token.S_QUOTE, lineNumber));
             //continue if blank space or tab
             else if (c == ' ' || c == '\t')
                 continue;
             //invalid token
-            else
-                System.out.println("**ERROR: Invalid Token: '" + c + "' Position " + i + "\n" +line);
-
-
+            else {
+                System.out.println("**ERROR (Line: " + lineNumber + "), Invalid Token: '" + c + "' \n" + line);
+                //System.exit(0);
+            }
         }
 
     }
