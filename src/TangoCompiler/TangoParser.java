@@ -145,28 +145,48 @@ public class TangoParser {
 
     }
 
-    //only handles production printContent -> " stringValue "
-    //TODO: add production printContent -> id
+
     public void parsePrintContent(Position tpos, int lt) {
-        if (tokens[tpos.x].type == Token.DB_QUOTE && tpos.x != lt) {
-            tpos.x++;
-        } else {
-            System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected double quotation");
-            System.exit(0);
-        }
+        //switch statement handles different productions
+        switch (tokens[tpos.x].type) {
+            //handles production printContent -> " string "
+            case Token.DB_QUOTE: {
+                if (tokens[tpos.x].type == Token.DB_QUOTE && tpos.x != lt) {
+                    tpos.x++;
+                } else {
+                    System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected double quotation");
+                    System.exit(0);
+                }
 
-        if (tokens[tpos.x].type == Token.ID && tpos.x != lt) {
-            tpos.x++;
-        } else {
-            System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected string value");
-            System.exit(0);
-        }
+                if (tokens[tpos.x].type == Token.STRING && tpos.x != lt) {
+                    tpos.x++;
+                } else {
+                    System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected string value");
+                    System.exit(0);
+                }
 
-        if (tokens[tpos.x].type == Token.DB_QUOTE && tpos.x != lt) {
-            tpos.x++;
-        } else {
-            System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected double quotation");
-            System.exit(0);
+                if (tokens[tpos.x].type == Token.DB_QUOTE && tpos.x != lt) {
+                    tpos.x++;
+                } else {
+                    System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected double quotation");
+                    System.exit(0);
+                }
+                break;
+            }
+
+            //handles production printContent -> id
+            case Token.ID: {
+                if (tokens[tpos.x].type == Token.ID && tpos.x != lt) {
+                    tpos.x++;
+                } else {
+                    System.out.println("**Parse Error (Line: " + tokens[tpos.x].lineNumber + "), Expected string value");
+                    System.exit(0);
+                }
+                break;
+            }
+
+            default:
+                System.out.println("**Parse Error ...");
         }
     }
 }

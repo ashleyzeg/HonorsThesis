@@ -20,10 +20,6 @@ public class TangoScanner {
             line = program.nextLine().trim();
             lineNumber = lineNumber + 1;
             scan(line, lineNumber);
-            //append end of line character to array
-            //tokens.add(new Token("*****", "END_LINE"));
-//            for (Token t: tokens)
-//                if (t != null) System.out.println(t);
         }
         for (Token t: tokens)
             if (t != null) System.out.println(t);
@@ -69,8 +65,25 @@ public class TangoScanner {
             else if (c == '+' || c == '-' || c == '*' || c == '/')
                 tokens.add(new Token(""+c, Token.OP, lineNumber));
             //double quote
-            else if (c == '"')
-                tokens.add(new Token(""+c, Token.DB_QUOTE, lineNumber));
+            else if (c == '"') {
+                tokens.add(new Token("" + c, Token.DB_QUOTE, lineNumber));
+                int k;
+                int prevNumTokens = tokens.size();
+                for (k = i+1; k < line.length(); k++) {
+                    c = line.charAt(k);
+                    if (c == '"') {
+                        tokens.add(new Token(line.substring(i+1, k), Token.STRING, lineNumber));
+                        tokens.add(new Token(""+c, Token.DB_QUOTE, lineNumber));
+                        break;
+                    }
+                }
+                int curNumTokens = tokens.size();
+                if (prevNumTokens == curNumTokens) {
+                    System.out.println("**ERROR (Line: " + lineNumber + "), Missing closing double quote \n" + line);
+                    System.exit(0);
+                }
+                i=k;
+            }
             //single quote
             else if (c == '\'')
                 tokens.add(new Token(""+c, Token.S_QUOTE, lineNumber));
@@ -80,7 +93,7 @@ public class TangoScanner {
             //invalid token
             else {
                 System.out.println("**ERROR (Line: " + lineNumber + "), Invalid Token: '" + c + "' \n" + line);
-                //System.exit(0);
+                System.exit(0);
             }
         }
 

@@ -32,10 +32,11 @@ public class Token {
     public static final int S_QUOTE = 10;
     public static final int KEYWORD = 11;
     public static final int ID = 12;
+    public static final int STRING = 13;
 
     public static final String [] typename = {
       "INT", "OP", "ASSIGN", "SEMI", "VAR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_CB", "CLOSE_CB",
-      "DB_QUOTE", "S_QUOTE", "KEYWORD", "ID"
+      "DB_QUOTE", "S_QUOTE", "KEYWORD", "ID", "STRING"
     };
 
     //print function
