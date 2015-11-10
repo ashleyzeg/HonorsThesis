@@ -18,6 +18,7 @@ public class Token {
         lineNumber = ln;
     }
 
+    //TODO: refactor token types and toString function
     //Token types
     public static final int INT = 0;
     public static final int OP = 1;
