@@ -24,9 +24,10 @@ public class tangoCompiler {
             System.exit(0);
         }
 
-        TangoScanner ts = new TangoScanner(inFile);
+        TangoScanner tScanner = new TangoScanner(inFile);
 
-        TangoParser tp = new TangoParser(ts.tokens);
+        TangoParser tParser = new TangoParser(tScanner.tokens);
 
+        //CodeGenerator codeGen = new CodeGenerator(tParser.classId);
     }
 }

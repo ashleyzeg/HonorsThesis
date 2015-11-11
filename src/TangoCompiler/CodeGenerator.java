@@ -9,26 +9,34 @@ import java.io.IOException;
  * Creates an output file and then generates the corresponding java code
  */
 public class CodeGenerator {
+    public FileWriter fw;
+    File file;
 
     public CodeGenerator() throws IOException {
         System.out.println("*** Welcome to the Code Generator!!! ***");
 
+        //TODO: figure out how to pass in claseId as filename
         //create output text file
-        File file = new File("test.java");
+        file = new File("test.java");
         file.createNewFile();
 
         //creates FileWriter Object
-        FileWriter fw = new FileWriter(file);
-
-        //writes content to file
-        fw.write("something");
-        fw.flush();
-        fw.close();
+        fw = new FileWriter(file);
 
     }
 
     //methods to write specific code chunks to file where do these methods go?
-    public  String getFileName(String filename) {
-        return filename;
+//    public File createFile(String filename) throws IOException {
+//        file = new File(filename + ".java");
+//        file.createNewFile();
+//        return file;
+//    }
+
+    public void writeClassStruct(String classId) throws IOException {
+        fw.write("public class " + classId + " {");
+    }
+
+    public void writeMainStruct() throws IOException {
+        fw.write("\n\tpublic static void main(String [] args) {");
     }
 }

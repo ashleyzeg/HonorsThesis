@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class TangoParser {
     public CodeGenerator codeGen = new CodeGenerator();
+    public String classId;
 
     public Token[] tokens;
     public Token token = new Token("", 0, 0);
@@ -32,6 +33,9 @@ public class TangoParser {
 
         parseProgram(tpos, lastToken);
 
+        codeGen.fw.flush();
+        codeGen.fw.close();
+
     }
 
     public void displayError (Position tpos, String errorMsg) {
@@ -39,7 +43,7 @@ public class TangoParser {
         System.exit(0);
     }
 
-    public void parseProgram (Position tpos, int lt) {
+    public void parseProgram (Position tpos, int lt) throws IOException {
         if(tokens[tpos.x].type == Token.KEYWORD && token.isClase(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
         } else {
@@ -47,6 +51,7 @@ public class TangoParser {
         }
 
         if(tokens[tpos.x].type == Token.ID && tpos.x != lt) {
+            classId = tokens[tpos.x].value;
             tpos.x++;
         } else {
             displayError(tpos, "Expected class identifier");
@@ -58,6 +63,9 @@ public class TangoParser {
             displayError(tpos, "Expected open curly brace");
         }
 
+        //should generate following java code: public class claseId {
+        codeGen.writeClassStruct(classId);
+
         parseClassContents(tpos, lt);
 
         if(tokens[tpos.x].type == Token.CLOSE_CB && tpos.x == lt) {
@@ -65,9 +73,11 @@ public class TangoParser {
         } else {
             displayError(tpos, "Expected end of program");
         }
+
+        codeGen.fw.write("\n}");
     }
 
-    public void parseClassContents(Position tpos, int lt) {
+    public void parseClassContents(Position tpos, int lt) throws IOException{
         if(tokens[tpos.x].type == Token.KEYWORD && token.isFunc$(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
             parseFuncMain(tpos, lt);
@@ -76,7 +86,7 @@ public class TangoParser {
         }
     }
 
-    public void parseFuncMain(Position tpos, int lt) {
+    public void parseFuncMain(Position tpos, int lt) throws IOException {
         if (tokens[tpos.x].type == Token.KEYWORD && token.isPrincipal(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
         } else {
@@ -101,6 +111,8 @@ public class TangoParser {
             displayError(tpos, "Expected open curly brace");
         }
 
+        codeGen.writeMainStruct();
+
         parseStmtList(tpos, lt);
 
         if (tokens[tpos.x].type == Token.CLOSE_CB && tpos.x != lt) {
@@ -108,6 +120,8 @@ public class TangoParser {
         } else {
             displayError(tpos, "Expected close curly brace");
         }
+
+        codeGen.fw.write("\n\t}");
     }
 
     public void parseStmtList(Position tpos, int lt) {
