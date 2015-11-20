@@ -33,8 +33,7 @@ public class TangoParser {
 
         parseProgram(tpos, lastToken);
 
-        codeGen.fw.flush();
-        codeGen.fw.close();
+        codeGen.closeFileWriter();
 
     }
 
@@ -62,6 +61,9 @@ public class TangoParser {
         } else {
             displayError(tpos, "Expected open curly brace");
         }
+
+        //should create file
+        codeGen.createFileWriter(classId);
 
         //should generate following java code: public class claseId {
         codeGen.writeClassStruct(classId);
@@ -124,7 +126,7 @@ public class TangoParser {
         codeGen.fw.write("\n\t}");
     }
 
-    public void parseStmtList(Position tpos, int lt) {
+    public void parseStmtList(Position tpos, int lt) throws IOException {
         if (tokens[tpos.x].type == Token.KEYWORD && token.isImprimirln(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
         } else {
@@ -153,8 +155,9 @@ public class TangoParser {
 
     }
 
-    public void parsePrintContent(Position tpos, int lt) {
+    public void parsePrintContent(Position tpos, int lt) throws IOException {
         //switch statement handles different productions
+        String stringCons = "";
         switch (tokens[tpos.x].type) {
             //handles production printContent -> " string "
             case Token.DB_QUOTE: {
@@ -165,6 +168,7 @@ public class TangoParser {
                 }
 
                 if (tokens[tpos.x].type == Token.STRING && tpos.x != lt) {
+                    stringCons = tokens[tpos.x].value;
                     tpos.x++;
                 } else {
                     displayError(tpos, "Expected string value");
@@ -175,6 +179,8 @@ public class TangoParser {
                 } else {
                     displayError(tpos, "Expected double quotation");
                 }
+
+                codeGen.writePrintStmt(stringCons);
                 break;
             }
 

@@ -1,5 +1,5 @@
 clase holaMundo {
     func$ principal() {
-        imprimirln("a b");
+        imprimirln("Hola Mundo!");
     }
 }

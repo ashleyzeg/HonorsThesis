@@ -31,6 +31,7 @@ public class TangoScanner {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
 
+            //TODO: modify scanner to allow variable names to contain numbers and letters
             //id, keyword, or library call
             if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
                 int j;

@@ -10,33 +10,33 @@ import java.io.IOException;
  */
 public class CodeGenerator {
     public FileWriter fw;
-    File file;
+    public File file;
 
+    //constructor
     public CodeGenerator() throws IOException {
         System.out.println("*** Welcome to the Code Generator!!! ***");
-
-        //TODO: figure out how to pass in claseId as filename
-        //create output text file
-        file = new File("test.java");
-        file.createNewFile();
-
-        //creates FileWriter Object
-        fw = new FileWriter(file);
-
     }
 
-    //methods to write specific code chunks to file where do these methods go?
-//    public File createFile(String filename) throws IOException {
-//        file = new File(filename + ".java");
-//        file.createNewFile();
-//        return file;
-//    }
+    //helper functions
+    public void createFileWriter(String filename) throws IOException {
+        file = new File(filename + ".java");
+        fw = new FileWriter(file);
+    }
+
+    public void closeFileWriter() throws IOException {
+        fw.flush();
+        fw.close();
+    }
 
     public void writeClassStruct(String classId) throws IOException {
         fw.write("public class " + classId + " {");
     }
 
     public void writeMainStruct() throws IOException {
-        fw.write("\n\tpublic static void main(String [] args) {");
+        fw.write("\npublic static void main(String [] args) {");
+    }
+
+    public void writePrintStmt(String s) throws IOException {
+        fw.write("\nSystem.out.println(\"" + s + "\");");
     }
 }

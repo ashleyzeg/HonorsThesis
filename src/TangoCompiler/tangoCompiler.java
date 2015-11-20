@@ -27,7 +27,5 @@ public class tangoCompiler {
         TangoScanner tScanner = new TangoScanner(inFile);
 
         TangoParser tParser = new TangoParser(tScanner.tokens);
-
-        //CodeGenerator codeGen = new CodeGenerator(tParser.classId);
     }
 }
