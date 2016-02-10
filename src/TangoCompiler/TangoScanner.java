@@ -26,7 +26,6 @@ public class TangoScanner {
     }
 
     //scans for valid tokens and appends them to the tokens array list
-    //when the end of a line is reached, a new line character is placed into the arraylist
     public void scan(String line, int lineNumber) {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
@@ -42,6 +41,7 @@ public class TangoScanner {
                     tokens.add(new Token(line.substring(i,j-1), Token.KEYWORD, lineNumber));
                 else
                     tokens.add(new Token(line.substring(i,j-1), Token.ID, lineNumber));
+                //TODO: fix bug when scanning words/keywords
                 i=j-2;
             }
             //open curly brace

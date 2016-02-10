@@ -20,20 +20,49 @@ public class Token {
 
     //TODO: refactor token types and toString function
     //Token types
-    public static final int INT = 0;
-    public static final int OP = 1;
-    public static final int ASSIGN = 2;
-    public static final int SEMI = 3;
-    public static final int VAR = 4;
+
+    //MISC TOKENS
     public static final int OPEN_PAREN = 5;
     public static final int CLOSE_PAREN = 6;
     public static final int OPEN_CB = 7;
     public static final int CLOSE_CB = 8;
-    public static final int DB_QUOTE = 9;
     public static final int S_QUOTE = 10;
-    public static final int KEYWORD = 11;
+    public static final int DB_QUOTE = 9;
+    public static final int SEMI = 3;
+
+
+    //EXPRESSION & COMPARISON TOKENS
+    public static final int VAR = 4; //var and id may be able to be combined?
     public static final int ID = 12;
+    public static final int OP = 1; //+, -, *, /
+    public static final int ASSIGN = 2; //=
+
+    //KEYWORD TOKENS
+    public static final int KEYWORD = 11;
+
+    //DATA TYPE TOKENS
+    public static final int INT = 0;
+    public static final int DOUBLE = 14;
     public static final int STRING = 13;
+    public static final int ARRAY_OPEN = 15;
+    public static final int ARRAY_CLOSE = 16;
+    public static final int BOOL = 17;
+
+
+
+    //IF STATEMENT & LOOP TOKENS
+
+    //CLASS & FUNCTION TOKENS
+
+    //BASIC I/0 TOKENS
+
+    //
+
+
+
+
+
+
 
     public static final String [] typename = {
       "INT", "OP", "ASSIGN", "SEMI", "VAR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_CB", "CLOSE_CB",
