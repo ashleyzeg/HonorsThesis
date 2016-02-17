@@ -79,6 +79,9 @@ public class TangoScanner {
             //operators
             else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
                 tokens.add(new Token(""+c, Token.OP, lineNumber));
+            //comparison operator
+            else if (c == '<' || c == '>') //TODO: add &&, ||, ==, >=, <=, !=
+                tokens.add(new Token(""+c, Token.COMP_OP, lineNumber));
             //double quote
             else if (c == '"') {
                 tokens.add(new Token("" + c, Token.DB_QUOTE, lineNumber));

@@ -36,8 +36,9 @@ public class Token {
     //EXPRESSION & COMPARISON TOKENS
     public static final int VAR = 4; //var and id may be able to be combined?
     public static final int ID = 12;
-    public static final int OP = 1; //+, -, *, /
+    public static final int OP = 1; //+, -, *, /, %
     public static final int ASSIGN = 2; //=
+    public static final int COMP_OP = 18; // &&, ||, ==, !=, <, >, <=, >=
 
     //KEYWORD TOKENS
     public static final int KEYWORD = 11;
@@ -58,7 +59,7 @@ public class Token {
 
     public static final String [] typename = {
       "INT", "OP", "ASSIGN", "SEMI", "VAR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_CB", "CLOSE_CB",
-      "DB_QUOTE", "S_QUOTE", "KEYWORD", "ID", "STRING"
+      "DB_QUOTE", "S_QUOTE", "KEYWORD", "ID", "STRING", "DOULBE", "?", "OPEN_BR", "CLOSE_BR", "COMP_OP"
     };
 
     //print function
