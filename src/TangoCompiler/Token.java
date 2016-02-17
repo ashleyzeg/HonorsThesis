@@ -26,6 +26,8 @@ public class Token {
     public static final int CLOSE_PAREN = 6;
     public static final int OPEN_CB = 7;
     public static final int CLOSE_CB = 8;
+    public static final int OPEN_BR = 16;
+    public static final int CLOSE_BR = 17;
     public static final int S_QUOTE = 10;
     public static final int DB_QUOTE = 9;
     public static final int SEMI = 3;
@@ -44,10 +46,6 @@ public class Token {
     public static final int INT = 0;
     public static final int DOUBLE = 14;
     public static final int STRING = 13;
-    public static final int ARRAY_OPEN = 15;
-    public static final int ARRAY_CLOSE = 16;
-    public static final int BOOL = 17;
-
 
 
     //IF STATEMENT & LOOP TOKENS
@@ -57,12 +55,6 @@ public class Token {
     //BASIC I/0 TOKENS
 
     //
-
-
-
-
-
-
 
     public static final String [] typename = {
       "INT", "OP", "ASSIGN", "SEMI", "VAR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_CB", "CLOSE_CB",
@@ -74,10 +66,17 @@ public class Token {
         return "Token: " + value + " Type: " + typename[type];
     }
 
-    public static final String[] keywords = {"clase", "func$", "principal", "imprimirln"};
+    public static final String[] keywords = {
+            //class and function keywords
+            "clase", "func$", "principal", "imprimirln",
+
+            //data type keywords
+            "ent", "dec", "cadena", "bool", "cierto", "falso", "nuevo"
+    };
+
+    private ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
 
     public Boolean isKeyword(String t) {
-        ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
         //returns true if keyword is in list, returns false if keyword is not in list
         return keywordList.contains(t);
     }

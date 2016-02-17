@@ -30,20 +30,34 @@ public class TangoScanner {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
 
+            //allow for comments denoted by the symbols '#'
+            if (c == '#') {
+                i=line.length();
+            }
             //TODO: modify scanner to allow variable names to contain numbers and letters
             //id, keyword, or library call
-            if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
+            else if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
                 int j;
-                for( j=i; j<line.length() && (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '$'); j++) {
+                for( j=i+1; j<line.length() && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '$'); j++) {
                     c=line.charAt(j);
                 }
-                if (tokenObj.isKeyword(line.substring(i,j-1)))
-                    tokens.add(new Token(line.substring(i,j-1), Token.KEYWORD, lineNumber));
+                //check to see if end of line
+                int strEnd;
+                if(j == line.length()) strEnd = j;
+                else strEnd = j-1;
+
+                if (tokenObj.isKeyword(line.substring(i,strEnd)))
+                    tokens.add(new Token(line.substring(i,strEnd), Token.KEYWORD, lineNumber));
                 else
-                    tokens.add(new Token(line.substring(i,j-1), Token.ID, lineNumber));
-                //TODO: fix bug when scanning words/keywords
+                    tokens.add(new Token(line.substring(i,strEnd), Token.ID, lineNumber));
                 i=j-2;
             }
+            //open bracket
+            else if (c == '[' )
+                tokens.add(new Token(""+c, Token.OPEN_BR, lineNumber));
+            //close bracket
+            else if (c == ']' )
+                tokens.add(new Token(""+c, Token.CLOSE_BR, lineNumber));
             //open curly brace
             else if (c == '{' )
                 tokens.add(new Token(""+c, Token.OPEN_CB, lineNumber));
@@ -63,7 +77,7 @@ public class TangoScanner {
             else if (c == '=')
                 tokens.add(new Token(""+c, Token.ASSIGN, lineNumber));
             //operators
-            else if (c == '+' || c == '-' || c == '*' || c == '/')
+            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
                 tokens.add(new Token(""+c, Token.OP, lineNumber));
             //double quote
             else if (c == '"') {
