@@ -25,14 +25,26 @@ public class TangoScanner {
             if (t != null) System.out.println(t);
     }
 
+    public int checkStrEnd(String line, int index) {
+        return index == line.length() ? index : index-1;
+    }
+
     //scans for valid tokens and appends them to the tokens array list
     public void scan(String line, int lineNumber) {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
 
             //allow for comments denoted by the symbols '#'
-            if (c == '#') {
+            if (c == '#')
                 i=line.length();
+            //integer
+            else if (c >= '0' && c <= '9') {
+                int j;
+                for( j=i+1; j<line.length() && (c >= '0' && c <= '9'); j++) {
+                    c=line.charAt(j);
+                }
+                tokens.add(new Token(line.substring(i,j-1), Token.INT, lineNumber));
+                i=j-2;
             }
             //TODO: modify scanner to allow variable names to contain numbers and letters
             //id, keyword, or library call
@@ -41,15 +53,10 @@ public class TangoScanner {
                 for( j=i+1; j<line.length() && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '$'); j++) {
                     c=line.charAt(j);
                 }
-                //check to see if end of line
-                int strEnd;
-                if(j == line.length()) strEnd = j;
-                else strEnd = j-1;
-
-                if (tokenObj.isKeyword(line.substring(i,strEnd)))
-                    tokens.add(new Token(line.substring(i,strEnd), Token.KEYWORD, lineNumber));
+                if (tokenObj.isKeyword(line.substring(i,j-1)))
+                    tokens.add(new Token(line.substring(i,j-1), Token.KEYWORD, lineNumber));
                 else
-                    tokens.add(new Token(line.substring(i,strEnd), Token.ID, lineNumber));
+                    tokens.add(new Token(line.substring(i,j-1), Token.ID, lineNumber));
                 i=j-2;
             }
             //open bracket
