@@ -25,26 +25,45 @@ public class TangoScanner {
             if (t != null) System.out.println(t);
     }
 
-    public int checkStrEnd(String line, int index) {
-        return index == line.length() ? index : index-1;
-    }
-
     //scans for valid tokens and appends them to the tokens array list
     public void scan(String line, int lineNumber) {
         for(int i=0; i<line.length(); i++) {
             char c = line.charAt(i);
+            //TODO: fix for loops and lc
+            int lc = line.length(); //check for last character
 
             //allow for comments denoted by the symbols '#'
             if (c == '#')
                 i=line.length();
-            //integer
+            //TODO: refactor for loops --> move j=i+1 outside of the for loop
+            //integer ex: 1.3
             else if (c >= '0' && c <= '9') {
-                int j;
-                for( j=i+1; j<line.length() && (c >= '0' && c <= '9'); j++) {
-                    c=line.charAt(j);
+                int j=0, k=0;
+                Boolean isDec = false;
+                for(j=i+1; j<line.length() && ((c >= '0' && c <= '9') || c == '.'); j++) {
+                    if (c == '.') {
+                        isDec = true;
+                        if (j == lc) {
+                            System.out.println("**ERROR (Line: " + lineNumber + "), Invalid Token: '" + c + "' \n" + line);
+                            System.exit(0);
+                        } else {
+                            c = line.charAt(j);
+                            for (k=j+1; k<line.length() && (c >= '0' && c <= '9'); k++) {
+                                c=line.charAt(k);
+                            }
+                        }
+                    } else {
+                        c=line.charAt(j);
+                    }
                 }
-                tokens.add(new Token(line.substring(i,j-1), Token.INT, lineNumber));
-                i=j-2;
+                if (isDec) {
+                    tokens.add(new Token(line.substring(i, k-1), Token.DOUBLE, lineNumber));
+                    i=k-2;
+                } else {
+                    tokens.add(new Token(line.substring(i,j-1), Token.INT, lineNumber));
+                    i=j-2;
+                }
+
             }
             //TODO: modify scanner to allow variable names to contain numbers and letters
             //id, keyword, or library call
