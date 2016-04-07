@@ -96,9 +96,10 @@ public class Token {
     public Boolean isPrincipal(String t) {return t.equals("principal");}
     public Boolean isPública(String t) { return t.equals("públic@");}
 
+    //data type keywords
+    public Boolean isDataType(String t) {return t.equals("ent") || t.equals("dec") || t.equals("cadena") || t.equals("bool");}
+
     //library calls
     public Boolean isImprimirln(String t) {return t.equals("imprimirln");}
-
-
 
 }
