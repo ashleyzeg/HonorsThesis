@@ -69,10 +69,16 @@ public class Token {
 
     public static final String[] keywords = {
             //class and function keywords
-            "clase", "func$", "principal", "imprimirln",
+            "clase", "func$", "principal",
+
+            //library call keywords
+            "imprimirln",
+
+            //access modifier keywords
+            "públic@",
 
             //data type keywords
-            "ent", "dec", "cadena", "bool", "cierto", "falso", "nuevo"
+            "ent", "dec", "cadena", "bool", "ciert@", "fals@", "nuev@"
     };
 
     private ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
@@ -84,9 +90,13 @@ public class Token {
 
     //TODO: separate Keywords into keywords and library calls
 
+    //high level keywords
     public Boolean isClase(String t) {return t.equals("clase");}
     public Boolean isFunc$(String t) {return t.equals("func$");}
     public Boolean isPrincipal(String t) {return t.equals("principal");}
+    public Boolean isPública(String t) { return t.equals("públic@");}
+
+    //library calls
     public Boolean isImprimirln(String t) {return t.equals("imprimirln");}
 
 

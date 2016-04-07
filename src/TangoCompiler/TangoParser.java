@@ -8,11 +8,10 @@ import java.util.ArrayList;
  * Created by azegiest on 11/4/15.
  */
 public class TangoParser {
-    public CodeGenerator codeGen = new CodeGenerator();
-    public String classId;
+    private CodeGenerator codeGen = new CodeGenerator();
 
-    public Token[] tokens;
-    public Token token = new Token("", 0, 0);
+    private Token[] tokens;
+    private Token token = new Token("", 0, 0);
     private class Position {
         public int x;
     }
@@ -42,7 +41,11 @@ public class TangoParser {
         System.exit(0);
     }
 
+    //PRODUCTION: program --> clase id accessMod { classContents }
     public void parseProgram (Position tpos, int lt) throws IOException {
+        String classId = "";
+        String accessModVal = "";
+
         if(tokens[tpos.x].type == Token.KEYWORD && token.isClase(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
         } else {
@@ -56,6 +59,9 @@ public class TangoParser {
             displayError(tpos, "Expected class identifier");
         }
 
+        parseAccessMod(tpos, lt);
+        accessModVal = tokens[tpos.x-1].value;
+
         if(tokens[tpos.x].type == Token.OPEN_CB && tpos.x != lt) {
             tpos.x++;
         } else {
@@ -66,7 +72,7 @@ public class TangoParser {
         codeGen.createFileWriter(classId);
 
         //should generate following java code: public class claseId {
-        codeGen.writeClassStruct(classId);
+        codeGen.writeClassStruct(classId, accessModVal);
 
         parseClassContents(tpos, lt);
 
@@ -77,6 +83,14 @@ public class TangoParser {
         }
 
         codeGen.fw.write("\n}");
+    }
+
+    public void parseAccessMod(Position tpos, int lt) throws IOException {
+        if(tokens[tpos.x].type == Token.KEYWORD && token.isPública(tokens[tpos.x].value) && tpos.x != lt) {
+            tpos.x++;
+        } else {
+            displayError(tpos, "Access modifier expected");
+        }
     }
 
     public void parseClassContents(Position tpos, int lt) throws IOException{

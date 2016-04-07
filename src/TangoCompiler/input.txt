@@ -1,4 +1,5 @@
-clase holaMundo {
+#comment
+clase holaMundo públic@ {
     func$ principal() {
         imprimirln("Hola Mundo!");
     }
