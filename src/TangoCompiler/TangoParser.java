@@ -142,7 +142,8 @@ public class TangoParser {
     public void parseStmtList(Position tpos, int lt) throws IOException {
         //stmt --> stmt stmtList
         if (tokens[tpos.x].type == Token.KEYWORD
-                && (token.isImprimirln(tokens[tpos.x].value) || token.isDataType(tokens[tpos.x].value))
+                && (token.isImprimirln(tokens[tpos.x].value) || token.isDataType(tokens[tpos.x].value)
+                || token.isSi(tokens[tpos.x].value) || token.isSino(tokens[tpos.x].value))
                 && tpos.x != lt) {
             parseStmt(tpos, lt);
             parseStmtList(tpos, lt);
@@ -207,6 +208,35 @@ public class TangoParser {
                 displayError(tpos, "Expected semi-colon");
             }
         }
+
+        //TODO: implement sinoTail
+        //stmt --> si ( condition ) { stmtList }
+        else if (tokens[tpos.x].type == Token.KEYWORD && token.isSi(tokens[tpos.x].value) && tpos.x != lt) {
+            tpos.x++;
+
+            if (tokens[tpos.x].type == Token.OPEN_PAREN && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected open paren");
+            }
+
+            parseCondition(tpos, lt);
+
+            if (tokens[tpos.x].type == Token.CLOSE_PAREN && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected close paren");
+            }
+
+            if (tokens[tpos.x].type == Token.OPEN_CB && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected open curly brace");
+            }
+
+            parseStmtList(tpos, lt);
+
+        }
     }
 
     public void parseDataType(Position tpos, int lt) throws IOException {
@@ -232,6 +262,16 @@ public class TangoParser {
             symbolTable.put(tokens[tpos.x-2].value, tokens[tpos.x].value);
 
             codeGen.writeBoolVal(tokens[tpos.x].value);
+            tpos.x++;
+        }
+    }
+
+    public void parseCondition(Position tpos, int lt) throws IOException {
+        //TODO implement more derivations of condition (expand grammar)
+        //checks for variable
+        String boolVal = symbolTable.containsKey(tokens[tpos.x].value) ? symbolTable.get(tokens[tpos.x].value) : null;
+
+        if (token.isBool(boolVal)) {
             tpos.x++;
         }
     }

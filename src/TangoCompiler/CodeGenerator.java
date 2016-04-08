@@ -89,6 +89,6 @@ public class CodeGenerator {
     }
 
     public static void writeSemiColon() throws IOException {
-        fw.write(";");
+        fw.write(";\n");
     }
 }

@@ -78,7 +78,10 @@ public class Token {
             "públic@",
 
             //data type keywords
-            "ent", "dec", "cadena", "bool", "ciert@", "fals@", "nuev@"
+            "ent", "dec", "cadena", "bool", "ciert@", "fals@", "nuev@",
+
+            //if statement keywords
+            "si", "sino"
     };
 
     private ArrayList<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
@@ -99,6 +102,10 @@ public class Token {
     //data type keywords
     public Boolean isDataType(String t) {return t.equals("ent") || t.equals("dec") || t.equals("cadena") || t.equals("bool");}
     public Boolean isBool(String t) {return t.equals("ciert@") || t.equals("fals@");}
+
+    //if statement keywords
+    public Boolean isSi(String t) {return t.equals("si");}
+    public Boolean isSino(String t) {return t.equals("sino");}
 
     //library calls
     public Boolean isImprimirln(String t) {return t.equals("imprimirln");}
