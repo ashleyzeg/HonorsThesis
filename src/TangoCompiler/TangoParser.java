@@ -131,42 +131,99 @@ public class TangoParser {
 
         parseStmtList(tpos, lt);
 
-        if (tokens[tpos.x].type == Token.CLOSE_CB && tpos.x != lt) {
-            tpos.x++;
-        } else {
-            displayError(tpos, "Expected close curly brace");
-        }
+        //token array index is increased by 1 in the parseStmtList function once stmtList --> E occurs and '}' is found
 
         codeGen.fw.write("\n\t}");
     }
 
     public void parseStmtList(Position tpos, int lt) throws IOException {
+        //stmt --> stmt stmtList
+        if (tokens[tpos.x].type == Token.KEYWORD
+                && (token.isImprimirln(tokens[tpos.x].value) || token.isDataType(tokens[tpos.x].value))
+                && tpos.x != lt) {
+            parseStmt(tpos, lt);
+            parseStmtList(tpos, lt);
+        }
+
+        //stmt --> E
+        else if (tokens[tpos.x].type == Token.CLOSE_CB && tpos.x != lt) {
+            tpos.x++;
+        } else {
+            displayError(tpos, "stmtList error");
+        }
+
+    }
+
+    public void parseStmt(Position tpos, int lt) throws IOException {
+        //stmt --> imprimirln ( printContent );
         if (tokens[tpos.x].type == Token.KEYWORD && token.isImprimirln(tokens[tpos.x].value) && tpos.x != lt) {
             tpos.x++;
-        } else {
-            displayError(tpos, "Expected keyword imprimirln");
+
+            if (tokens[tpos.x].type == Token.OPEN_PAREN && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected open paren");
+            }
+
+            parsePrintContent(tpos, lt);
+
+            if (tokens[tpos.x].type == Token.CLOSE_PAREN && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected close paren");
+            }
+
+            if (tokens[tpos.x].type == Token.SEMI && tpos.x != lt) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected semicolon");
+            }
         }
 
-        if (tokens[tpos.x].type == Token.OPEN_PAREN && tpos.x != lt) {
+        //stmt --> dataType id decTail;
+        else if (tokens[tpos.x].type == Token.KEYWORD && token.isDataType(tokens[tpos.x].value) && tpos.x != lt) {
+
+            parseDataType(tpos, lt);
+
+            if (tokens[tpos.x].type == Token.ID && tpos.x != lt) {
+                //store id name and value
+                tpos.x++;
+                System.out.println("need to store id and value");
+            } else {
+                displayError(tpos, "Expected id");
+            }
+
+            parseDecTail(tpos, lt);
+
+            if (tokens[tpos.x].type == Token.SEMI) {
+                tpos.x++;
+            } else {
+                displayError(tpos, "Expected semi-colon");
+            }
+        }
+    }
+
+    public void parseDataType(Position tpos, int lt) throws IOException {
+        //dataType --> ent | dec | cadena | bool
+        if (token.isDataType(tokens[tpos.x].value)) {
             tpos.x++;
-        } else {
-            displayError(tpos, "Expected open paren");
         }
+    }
 
-        parsePrintContent(tpos, lt);
-
-        if (tokens[tpos.x].type == Token.CLOSE_PAREN && tpos.x != lt) {
+    public void parseDecTail(Position tpos, int lt) throws IOException {
+        //decTail --> = expr
+        if (tokens[tpos.x].type == Token.ASSIGN && tpos.x != lt) {
             tpos.x++;
-        } else {
-            displayError(tpos, "Expected close paren");
         }
 
-        if (tokens[tpos.x].type == Token.SEMI && tpos.x != lt) {
+        parseExpr(tpos, lt);
+    }
+
+    public void parseExpr(Position tpos, int lt) throws  IOException {
+        //expr --> boolOp
+        if (tokens[tpos.x].type == Token.KEYWORD && token.isBool(tokens[tpos.x].value)) {
             tpos.x++;
-        } else {
-            displayError(tpos, "Expected semicolon");
         }
-
     }
 
     public void parsePrintContent(Position tpos, int lt) throws IOException {

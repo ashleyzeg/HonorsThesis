@@ -1,6 +1,7 @@
 #comment
 clase holaMundo públic@ {
     func$ principal() {
+        bool URC = ciert@ ;
         imprimirln("Hola Mundo!");
     }
 }

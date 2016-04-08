@@ -98,6 +98,7 @@ public class Token {
 
     //data type keywords
     public Boolean isDataType(String t) {return t.equals("ent") || t.equals("dec") || t.equals("cadena") || t.equals("bool");}
+    public Boolean isBool(String t) {return t.equals("ciert@") || t.equals("fals@");}
 
     //library calls
     public Boolean isImprimirln(String t) {return t.equals("imprimirln");}
