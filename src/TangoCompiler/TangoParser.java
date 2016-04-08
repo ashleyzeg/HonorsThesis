@@ -215,6 +215,7 @@ public class TangoParser {
             tpos.x++;
 
             if (tokens[tpos.x].type == Token.OPEN_PAREN && tpos.x != lt) {
+                codeGen.writeIfBeg();
                 tpos.x++;
             } else {
                 displayError(tpos, "Expected open paren");
@@ -223,12 +224,14 @@ public class TangoParser {
             parseCondition(tpos, lt);
 
             if (tokens[tpos.x].type == Token.CLOSE_PAREN && tpos.x != lt) {
+                codeGen.writeCloseParen();
                 tpos.x++;
             } else {
                 displayError(tpos, "Expected close paren");
             }
 
             if (tokens[tpos.x].type == Token.OPEN_CB && tpos.x != lt) {
+                codeGen.writeOpenCB();
                 tpos.x++;
             } else {
                 displayError(tpos, "Expected open curly brace");
@@ -236,6 +239,7 @@ public class TangoParser {
 
             parseStmtList(tpos, lt);
 
+            codeGen.writeCloseCB();
         }
     }
 
@@ -272,6 +276,7 @@ public class TangoParser {
         String boolVal = symbolTable.containsKey(tokens[tpos.x].value) ? symbolTable.get(tokens[tpos.x].value) : null;
 
         if (token.isBool(boolVal)) {
+            codeGen.writeBoolVal(boolVal);
             tpos.x++;
         }
     }

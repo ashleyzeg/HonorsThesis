@@ -91,4 +91,24 @@ public class CodeGenerator {
     public static void writeSemiColon() throws IOException {
         fw.write(";\n");
     }
+
+    public static void writeIfBeg() throws IOException {
+        fw.write("if ( ");
+    }
+
+    public static void writeOpenCB() throws IOException {
+        fw.write("{ ");
+    }
+
+    public static void writeCloseCB() throws IOException {
+        fw.write("} ");
+    }
+
+    public static void writeOpenParen() throws IOException {
+        fw.write("( ");
+    }
+
+    public static void writeCloseParen() throws IOException {
+        fw.write(") ");
+    }
 }
