@@ -3,6 +3,7 @@ package TangoCompiler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by azegiest on 11/4/15.
@@ -12,6 +13,8 @@ public class TangoParser {
 
     private Token[] tokens;
     private Token token = new Token("", 0, 0);
+    //TODO: make symbol table its own class
+    private static Hashtable<String, String> symbolTable = new Hashtable<>();
     private class Position {
         public int x;
     }
@@ -186,16 +189,19 @@ public class TangoParser {
             parseDataType(tpos, lt);
 
             if (tokens[tpos.x].type == Token.ID && tpos.x != lt) {
-                //store id name and value
+                symbolTable.put(tokens[tpos.x].value, "");
                 tpos.x++;
-                System.out.println("need to store id and value");
             } else {
                 displayError(tpos, "Expected id");
             }
 
+            //TODO: refactor codeGen method - break into two separate methods
+            codeGen.writeDataTypeAndId(tokens[tpos.x-2].value, tokens[tpos.x-1].value);
+
             parseDecTail(tpos, lt);
 
             if (tokens[tpos.x].type == Token.SEMI) {
+                codeGen.writeSemiColon();
                 tpos.x++;
             } else {
                 displayError(tpos, "Expected semi-colon");
@@ -213,6 +219,7 @@ public class TangoParser {
     public void parseDecTail(Position tpos, int lt) throws IOException {
         //decTail --> = expr
         if (tokens[tpos.x].type == Token.ASSIGN && tpos.x != lt) {
+            codeGen.writeDecTail();
             tpos.x++;
         }
 
@@ -222,6 +229,9 @@ public class TangoParser {
     public void parseExpr(Position tpos, int lt) throws  IOException {
         //expr --> boolOp
         if (tokens[tpos.x].type == Token.KEYWORD && token.isBool(tokens[tpos.x].value)) {
+            symbolTable.put(tokens[tpos.x-2].value, tokens[tpos.x].value);
+
+            codeGen.writeBoolVal(tokens[tpos.x].value);
             tpos.x++;
         }
     }

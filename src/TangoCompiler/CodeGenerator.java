@@ -73,4 +73,22 @@ public class CodeGenerator {
     public static void writePrintStmt(String s) throws IOException {
         fw.write("\nSystem.out.println(\"" + s + "\");");
     }
+
+    //variable declaration writer helpers
+    public static void writeDataTypeAndId(String dataType, String id) throws IOException {
+        dataType = translate(dataType);
+        fw.write(dataType + " " + id + " ");
+    }
+
+    public static void writeDecTail() throws IOException {
+        fw.write("=");
+    }
+
+    public static void writeBoolVal(String boolVal) throws IOException {
+        fw.write(translate(boolVal) + " ");
+    }
+
+    public static void writeSemiColon() throws IOException {
+        fw.write(";");
+    }
 }
